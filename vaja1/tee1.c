@@ -14,9 +14,9 @@ void textCapture(FILE *out){
     }
 }
 
-void fileHandle(char *file, int argument){
-    int write = (argument != -1);
-    FILE *fptr = fopen(file, write ? "w" : "a");
+void fileHandle(char *file, int a){
+    int write = (a != -1);
+    FILE *fptr = fopen(file, a ? "a" : "w");
     if (fptr == NULL) {
         perror(write ? "Napaka pri kreiranju datoteke":"Napaka pri odpiranju/kreiranju datoteke");
         return;
@@ -27,12 +27,14 @@ void fileHandle(char *file, int argument){
 
 int main(int argc, char *argv[])
 {
+    int a = 0;
     int option;
     char *file = NULL;
 
     while ((option = getopt(argc, argv, ":a:")) != -1){
         switch (option){
             case 'a':
+                a++;
                 file = optarg;
                 break;
             case ':':
@@ -44,16 +46,16 @@ int main(int argc, char *argv[])
                 return 0;
         }
     }
+
+    if (!file && optind < argc){
+      file=argv[optind];
+      option=0;
+    }
     if (!file) {
         puts("Uporaba: [-a] datoteka");
         return 0;
-    }
-
-    if (!file && optind < argc){
-      file=argv[argc-1];
-      option=0;
     } 
 
-    fileHandle(file, option);
+    fileHandle(file, a);
     return 0;
 }
