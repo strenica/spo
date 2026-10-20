@@ -15,10 +15,9 @@ void textCapture(FILE *out){
 }
 
 void fileHandle(char *file, int a){
-    int write = (a != -1);
     FILE *fptr = fopen(file, a ? "a" : "w");
     if (fptr == NULL) {
-        perror(write ? "Napaka pri kreiranju datoteke":"Napaka pri odpiranju/kreiranju datoteke");
+        perror(a ? "Napaka pri odpiranju/kreiranju datoteke":"Napaka pri kreiranju datoteke");
         return;
     }
     textCapture(fptr);
@@ -34,7 +33,7 @@ int main(int argc, char *argv[])
     while ((option = getopt(argc, argv, ":a:")) != -1){
         switch (option){
             case 'a':
-                a++;
+                a=1;
                 file = optarg;
                 break;
             case ':':
@@ -49,7 +48,7 @@ int main(int argc, char *argv[])
 
     if (!file && optind < argc){
       file=argv[optind];
-      option=0;
+      a=0;
     }
     if (!file) {
         puts("Uporaba: [-a] datoteka");
