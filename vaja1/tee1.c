@@ -1,27 +1,29 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <errno.h>
 
 
-
-void textCapture(FILE *out){    
+void textCapture(int fd){
     char buff[BUFSIZ];
-    while (fgets(buff, sizeof(buff), stdin)){
-        fputs(buff, stdout);
-        fputs(buff, out);
-        fflush(out);
-
+    ssize_t n;
+    while ((n = read(STDIN_FILENO, buff, sizeof buff)) > 0){
+        write(STDOUT_FILENO, buff, n);
+        if (fd >= 0)
+            write(fd, buff, n);
     }
 }
 
-void fileHandle(char *file, int a){
-    FILE *fptr = fopen(file, a ? "a" : "w");
-    if (fptr == NULL) {
-        perror(a ? "Napaka pri odpiranju/kreiranju datoteke":"Napaka pri kreiranju datoteke");
+void fileHandle(char *file, int append){
+    int flags = O_WRONLY | O_CREAT | (append ? O_APPEND : O_TRUNC);
+    int fd = open(file, flags, 0644);
+    if (fd < 0) {
+        perror(append ? "Napaka pri odpiranju/kreiranju datoteke"
+                      : "Napaka pri kreiranju datoteke");
         return;
     }
-    textCapture(fptr);
-    fclose(fptr);
+    textCapture(fd);
+    close(fd);
 }
 
 int main(int argc, char *argv[])
