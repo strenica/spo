@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <errno.h>
-
 
 void textCapture(int fd){
     char buff[BUFSIZ];
@@ -18,8 +16,7 @@ void fileHandle(char *file, int append){
     int flags = O_WRONLY | O_CREAT | (append ? O_APPEND : O_TRUNC);
     int fd = open(file, flags, 0644);
     if (fd < 0) {
-        perror(append ? "Napaka pri odpiranju/kreiranju datoteke"
-                      : "Napaka pri kreiranju datoteke");
+        perror(append ? "Napaka pri odpiranju/kreiranju datoteke":"Napaka pri kreiranju datoteke");
         return;
     }
     textCapture(fd);
