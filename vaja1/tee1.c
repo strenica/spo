@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
             case ':':
                 puts("Manjka argument za -a");
                 return 0;
-            case '?':
+            case '?': 
             default:
                 puts("Neznana opcija");
                 return 0;
