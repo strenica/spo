@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define VEL 256*16
+#define VELBLK 1//256*16
 extern int printf(const char *restrict fmt, ...);
 
 void fileCheck(char *file){
@@ -17,22 +17,43 @@ void fileCheck(char *file){
 }
 
 void endOfFile(int n, char *file){
-    fileCheck(file);
+    fileCheck(file); //če obstaja file in je berlijv
+
+    
     int fd = open(file, O_RDONLY);
     if (fd < 0) { perror("open"); exit(1); }
 
     long long size = lseek(fd, 0, SEEK_END);
-    const int BLK = 4096;
-    char buf[BLK];
-    long long pos = size, off = 0;
+    char buf[VELBLK];
+    long long pos = size;
+    long long off = 0;
     int found = 0;
 
+    printf("size: %lli, pos:%lli\n\n",size,pos);
+    
     while (pos > 0){
-        long long start = pos > BLK ? pos - BLK : 0;
-        if (lseek(fd, start, SEEK_SET) < 0) { perror("lseek"); exit(1); }
-        ssize_t got = read(fd, buf, pos - start);
+        long long start;
+        if (pos > VELBLK)
+            start = pos - VELBLK; 
+        else
+            start = 0;   
+
+        printf("size: %lli, pos:%lli, off:%lli, start:%lli\n",size,pos,off,start);
+        
+        if (lseek(fd, start, SEEK_SET) < 0) {perror("lseek"); exit(1); }
+        
+        ssize_t got = read(fd, buf, pos - start); //koliko bajtov prebere
+        
+        printf("got: %zd\n",got);
         if (got <= 0) break;
 
+        ///
+        printf("Beseda: ");
+        for(int i = 0; i!=got ;i++){
+            printf("%c",buf[i]);
+            }
+        printf("\n\n");
+        /////
         for (ssize_t i = got - 1; i >= 0; i--){
             if (buf[i] != '\n') continue;
             if (start + i == size - 1) continue;  
@@ -43,7 +64,7 @@ void endOfFile(int n, char *file){
 done:
     lseek(fd, off, SEEK_SET);
     ssize_t r;
-    while ((r = read(fd, buf, BLK)) > 0)
+    while ((r = read(fd, buf, VELBLK)) > 0)
         if (write(STDOUT_FILENO, buf, r) != r) { perror("write"); exit(1); }
     close(fd);
 }
@@ -64,8 +85,11 @@ int main(int argc, char *argv[])
             case ':':
                 printf("Manjka argument za -n\n");
                 return 0;
+            case '?':
+                printf("? napaka\n");
+                return 0;
             default:
-                printf("Neznana opcija\n");
+                printf("napaka\n");
                 return 0;
         }
     }
@@ -73,7 +97,7 @@ int main(int argc, char *argv[])
       file=argv[optind];
     }
     if (!file) {
-        printf("Uporaba: [-n] datoteka\n");
+        printf("Uporaba: [-n st] datoteka\n");
         return 0;
     } 
     
