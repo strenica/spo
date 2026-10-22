@@ -55,7 +55,7 @@ void endOfFile(int n, char *file){
 
         puts("loop");
         for (ssize_t i = r_bytes - 1; i >= 0; i--){
-            printf("r_bytes:%zd, i:%zd, start:%lli, found:%i, buf[i]:%c, size:%lli \n",r_bytes,i,start,found, buf[i],size);
+            printf("zacetekIzpisa: %lli, r_bytes:%zd, i:%zd, start:%lli, found:%i, buf[i]:%c, size:%lli \n",zacetekIzpisa,r_bytes,i,start,found, buf[i],size);
             if (buf[i] != '\n') continue; 
             if (start + i == size - 1) continue;
             if (++found == n){ zacetekIzpisa = start + i + 1; goto done; }
