@@ -6,8 +6,9 @@
 #include <stdlib.h>
 
 void pregled(char *l){
+    char *izpis;
+    
     struct stat buf;
-
     if (stat(l, &buf) < 0){
         printf("%s, ne obstaja\n",l);
 		exit(2);
@@ -20,8 +21,10 @@ void pregled(char *l){
 	else if ( S_ISLNK(buf.st_mode) )
 		type = 'l';	
 	else 
-		type = '?';
-
+		type = '?';	
+	
+	izpis=izpis+type;
+	printf("%s",izpis);
 }
 
 
