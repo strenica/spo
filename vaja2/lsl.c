@@ -42,11 +42,11 @@ static const char *to_str(struct stat *buf) {
   return s;
 }
 
-void pregled(const char *l) {
+void pregled(const char *pot) {
   struct stat buf;
 
-  if (lstat(l, &buf) < 0) {
-    fprintf(stderr, "%s, ne obstaja\n", l);
+  if (lstat(pot, &buf) < 0) {
+    fprintf(stderr, "%s, ne obstaja\n", pot);
     return;
   }
 
@@ -57,12 +57,12 @@ void pregled(const char *l) {
   if (pw != NULL) {
     lastnik = pw->pw_name;
   } else {
-    snprintf(uid, sizeof uid, "%lu", (unsigned long)buf.st_uid);
     lastnik = uid;
   }
 
-  printf("%s %lu %s %lld %s\n", to_str(&buf), (unsigned long)buf.st_nlink, lastnik, (long long)buf.st_size, l);
+  printf("%s %lu %s %lld %s\n", to_str(&buf), buf.st_nlink, lastnik, buf.st_size, pot);
 }
+
 
 int main(int argc, char *argv[]) {
   if (argc < 2) {
