@@ -7,7 +7,7 @@
 
 
 int main() {
-    char wd[1024][256];
+    static char wd[1024][256];
     ino_t wdIno[1024];
     DIR *dir = opendir(".");
     struct dirent *entry;
@@ -31,8 +31,10 @@ int main() {
     n++; goto loop;
 
     stop:
+    putchar('/');
     for(;n!=0;n--){
-        printf("%s/",wd[n]);
+        printf("%s", wd[n]);
+        if(n != 1) putchar('/');
     }
     printf("\n");
 }
