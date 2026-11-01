@@ -22,7 +22,6 @@ int main(int argc, char* argv[]) {
     DIR *dir;
     bool flag_r = 0;
     const char *pot = ".";
-    dir = opendir(pot);
 
     if(argc>=2){
         const char *pot = argv[1];
@@ -33,9 +32,9 @@ int main(int argc, char* argv[]) {
         }
         if(argc>=3){
             const char *pot = argv[2];
-            dir=opendir(pot);
         }
     }
+    dir = opendir(pot);
 
     if (dir == NULL) {
         perror("opendir");
