@@ -24,14 +24,14 @@ int main(int argc, char* argv[]) {
     const char *pot = ".";
 
     if(argc>=2){
-        const char *pot = argv[1];
+        pot = argv[1];
         if(!strcmp(pot,"-r")){
             flag_r = 1;
         }else{
-            const char *pot = argv[1];
+            pot = argv[1];
         }
         if(argc>=3){
-            const char *pot = argv[2];
+            pot = argv[2];
         }
     }
     dir = opendir(pot);
@@ -51,7 +51,9 @@ int main(int argc, char* argv[]) {
 
     while ((entry = readdir(dir)) != NULL) {
 
-        snprintf(arr[n].path, sizeof arr[n].path, "%s/%s", pot, entry->d_name);
+        snprintf(arr[n].path, sizeof arr[n].path,
+                 (pot[strlen(pot)-1] == '/') ? "%s%s" : "%s/%s",
+                 pot, entry->d_name);
         lstat(arr[n].path, &buf);
         arr[n].mt = buf.st_mtime;
         n++;
