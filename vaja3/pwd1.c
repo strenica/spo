@@ -4,7 +4,6 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-
 int main() {
     static char wd[1024][256];
     ino_t wdIno[1024];

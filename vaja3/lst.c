@@ -9,7 +9,7 @@ typedef struct { char path[4096]; time_t mt; } Ent;
 
 bool flag_r = 0;
 static int cmp(const void *a, const void *b) {
-    time_t x = ((Ent*)a)->mt
+    time_t x = ((Ent*)a)->mt;
     time_t y = ((Ent*)b)->mt;
     if(!flag_r){
     if (x > y) return -1;
