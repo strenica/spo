@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]) {
   long B = 4096;
-  long N = 5000000;
+  long N = 5'000'000;
 
   struct timespec ts1, ts2;
   double cas;
