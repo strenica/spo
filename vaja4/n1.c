@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define VELIKOST_BUF 8000
+
 int main(int argc, char *argv[]) {
   long B = 4096;
   long N = 5000000;
@@ -10,6 +12,7 @@ int main(int argc, char *argv[]) {
   double cas;
   long i;
   FILE *fptr;
+  char buf[VELIKOST_BUF];
 
   if (argc > 1) {
     B = atol(argv[1]);
@@ -18,13 +21,18 @@ int main(int argc, char *argv[]) {
     N = atol(argv[2]);
   }
 
+  if (B < 1 || B > VELIKOST_BUF) {
+    printf("Napaka: B mora biti med 1 in %d.\n", VELIKOST_BUF);
+    return 1;
+  }
+
   fptr = fopen("izhod.txt", "w");
   if (fptr == NULL) {
     perror("fopen");
     return 1;
   }
 
-  if (setvbuf(fptr, NULL, _IOFBF, B) != 0) {
+  if (setvbuf(fptr, buf, _IOFBF, B) != 0) {
     perror("setvbuf");
     fclose(fptr);
     return 1;
