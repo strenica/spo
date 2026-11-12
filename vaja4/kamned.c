@@ -18,7 +18,7 @@ int append(char *fileName) {
   FILE *f;
 
   f = fopen(fileName, "a");
-      if (f == NULL) {
+  if (f == NULL) {
         perror("fopen");
         return 1;
       }
@@ -33,7 +33,6 @@ int append(char *fileName) {
     fclose(f);
     return 1;
   }
-
   if (fclose(f) != 0) {
     perror("fclose");
     return 1;
